@@ -2,6 +2,8 @@
 
 Simple cross platform plugin to get Contacts from the device.
 
+**Currently in Alpha and not fully supported at this time**
+
 Ported from [Xamarin.Mobile](http://www.github.com/xamarin/xamarin.mobile) to a cross platform API.
 
 ### Setup
