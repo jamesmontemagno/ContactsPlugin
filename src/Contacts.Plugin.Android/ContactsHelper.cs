@@ -85,7 +85,7 @@ namespace Plugin.Contacts
         }
 
         string id = cursor.GetString(columnIndex);
-        if (uniques.Contains(id))
+        if (id == null || uniques.Contains(id))
           continue;
 
         uniques.Add(id);
