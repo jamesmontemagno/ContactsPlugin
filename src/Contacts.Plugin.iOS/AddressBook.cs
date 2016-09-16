@@ -32,131 +32,151 @@ using Plugin.Contacts.Abstractions;
 
 namespace Plugin.Contacts
 {
-  public class AddressBook
-    : IQueryable<Contact> //IQueryable<Contact>
-  {
-    public AddressBook()
+    public class AddressBook
+      : IQueryable<Contact> //IQueryable<Contact>
     {
-      this.provider = new ContactQueryProvider(this.addressBook);
-    }
-
-    public Task<bool> RequestPermission()
-    {
-      var tcs = new TaskCompletionSource<bool>();
-      if (UIDevice.CurrentDevice.CheckSystemVersion(6, 0))
-      {
-        var status = ABAddressBook.GetAuthorizationStatus();
-        if (status == ABAuthorizationStatus.Denied || status == ABAuthorizationStatus.Restricted)
-          tcs.SetResult(false);
-        else
+        public AddressBook()
         {
-          if (this.addressBook == null)
-          {
-            this.addressBook = new ABAddressBook();
             this.provider = new ContactQueryProvider(this.addressBook);
-          }
-
-          if (status == ABAuthorizationStatus.NotDetermined)
-          {
-            this.addressBook.RequestAccess((s, e) =>
-            {
-              tcs.SetResult(s);
-              if (!s)
-              {
-                this.addressBook.Dispose();
-                this.addressBook = null;
-                this.provider = null;
-              }
-            });
-          }
-          else
-            tcs.SetResult(true);
         }
-      }
-      else
-        tcs.SetResult(true);
 
-      return tcs.Task;
+        public Task<bool> RequestPermission()
+        {
+
+
+            var info = NSBundle.MainBundle.InfoDictionary;
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
+            {
+                if (!info.ContainsKey(new NSString("NSContactsUsageDescription")))
+                    throw new UnauthorizedAccessException("On iOS 10 and higher you must set NSContactsUsageDescription in your Info.plist file to enable Authorization Requests for Photo Library access!");
+            }
+
+
+            var tcs = new TaskCompletionSource<bool>();
+            if (UIDevice.CurrentDevice.CheckSystemVersion(6, 0))
+            {
+                var status = ABAddressBook.GetAuthorizationStatus();
+                if (status == ABAuthorizationStatus.Denied || status == ABAuthorizationStatus.Restricted)
+                    tcs.SetResult(false);
+                else
+                {
+                    if (this.addressBook == null)
+                    {
+                        this.addressBook = new ABAddressBook();
+                        this.provider = new ContactQueryProvider(this.addressBook);
+                    }
+
+                    if (status == ABAuthorizationStatus.NotDetermined)
+                    {
+                        this.addressBook.RequestAccess((s, e) =>
+                        {
+                            tcs.SetResult(s);
+                            if (!s)
+                            {
+                                this.addressBook.Dispose();
+                                this.addressBook = null;
+                                this.provider = null;
+                            }
+                        });
+                    }
+                    else
+                        tcs.SetResult(true);
+                }
+            }
+            else
+                tcs.SetResult(true);
+
+            return tcs.Task;
+        }
+
+        public IEnumerator<Contact> GetEnumerator()
+        {
+            CheckStatus();
+
+            return this.addressBook.GetPeople().Select(ContactHelper.GetContact).GetEnumerator();
+        }
+
+        public Contact Load(string id)
+        {
+            if (String.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException("id");
+
+            CheckStatus();
+
+            int rowId;
+            if (!Int32.TryParse(id, out rowId))
+                throw new ArgumentException("Not a valid contact ID", "id");
+
+            ABPerson person = this.addressBook.GetPerson(rowId);
+            if (person == null)
+                return null;
+
+            return ContactHelper.GetContact(person);
+        }
+
+        private ABAddressBook addressBook;
+        private IQueryProvider provider;
+
+        private void CheckStatus()
+        {
+
+            var info = NSBundle.MainBundle.InfoDictionary;
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
+            {
+                if (!info.ContainsKey(new NSString("NSContactsUsageDescription")))
+                    throw new UnauthorizedAccessException("On iOS 10 and higher you must set NSContactsUsageDescription in your Info.plist file to enable Authorization Requests for Photo Library access!");
+            }
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(6, 0))
+            {
+                var status = ABAddressBook.GetAuthorizationStatus();
+                if (status != ABAuthorizationStatus.Authorized)
+                    throw new System.Security.SecurityException("AddressBook has not been granted permission");
+            }
+
+            if (this.addressBook == null)
+            {
+                this.addressBook = new ABAddressBook();
+                this.provider = new ContactQueryProvider(this.addressBook);
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        //		Type IQueryable.ElementType
+        //		{
+        //			get { return typeof(Contact); }
+        //		}
+        //		
+        //		Expression IQueryable.Expression
+        //		{
+        //			get { return Expression.Constant (this); }
+        //		}
+        //		
+        //		IQueryProvider IQueryable.Provider
+        //		{
+        //			get { return this.provider; }
+        //		}
+
+        Type IQueryable.ElementType
+        {
+            get { return typeof(Contact); }
+        }
+
+        Expression IQueryable.Expression
+        {
+            get { return Expression.Constant(this); }
+        }
+
+        IQueryProvider IQueryable.Provider
+        {
+            get { return this.provider; }
+        }
+
     }
-
-    public IEnumerator<Contact> GetEnumerator()
-    {
-      CheckStatus();
-
-      return this.addressBook.GetPeople().Select(ContactHelper.GetContact).GetEnumerator();
-    }
-
-    public Contact Load(string id)
-    {
-      if (String.IsNullOrWhiteSpace(id))
-        throw new ArgumentNullException("id");
-
-      CheckStatus();
-
-      int rowId;
-      if (!Int32.TryParse(id, out rowId))
-        throw new ArgumentException("Not a valid contact ID", "id");
-
-      ABPerson person = this.addressBook.GetPerson(rowId);
-      if (person == null)
-        return null;
-
-      return ContactHelper.GetContact(person);
-    }
-
-    private ABAddressBook addressBook;
-    private IQueryProvider provider;
-
-    private void CheckStatus()
-    {
-      if (UIDevice.CurrentDevice.CheckSystemVersion(6, 0))
-      {
-        var status = ABAddressBook.GetAuthorizationStatus();
-        if (status != ABAuthorizationStatus.Authorized)
-          throw new System.Security.SecurityException("AddressBook has not been granted permission");
-      }
-
-      if (this.addressBook == null)
-      {
-        this.addressBook = new ABAddressBook();
-        this.provider = new ContactQueryProvider(this.addressBook);
-      }
-    }
-
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-    {
-      return GetEnumerator();
-    }
-
-    //		Type IQueryable.ElementType
-    //		{
-    //			get { return typeof(Contact); }
-    //		}
-    //		
-    //		Expression IQueryable.Expression
-    //		{
-    //			get { return Expression.Constant (this); }
-    //		}
-    //		
-    //		IQueryProvider IQueryable.Provider
-    //		{
-    //			get { return this.provider; }
-    //		}
-
-    Type IQueryable.ElementType
-    {
-      get { return typeof(Contact); }
-    }
-
-    Expression IQueryable.Expression
-    {
-      get { return Expression.Constant(this); }
-    }
-
-    IQueryProvider IQueryable.Provider
-    {
-      get { return this.provider; }
-    }
-
-  }
 }
