@@ -84,12 +84,6 @@
      <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.xml" target="lib\MonoAndroid10\Plugin.Contacts.Abstractions.xml" />
      <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.pdb" target="lib\MonoAndroid10\Plugin.Contacts.Abstractions.pdb" />
 
-     <!--Xamarin.iOS-->
-     <file src="src\Contacts.Plugin.iOS\bin\iPhone\Release\Plugin.Contacts.dll" target="lib\MonoTouch10\Plugin.Contacts.dll" />
-     <file src="src\Contacts.Plugin.iOS\bin\iPhone\Release\Plugin.Contacts.xml" target="lib\MonoTouch10\Plugin.Contacts.xml" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.dll" target="lib\MonoTouch10\Plugin.Contacts.Abstractions.dll" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.xml" target="lib\MonoTouch10\Plugin.Contacts.Abstractions.xml" />
-     
      <!--Xamarin.iOS Unified-->
      <file src="src\Contacts.Plugin.iOSUnified\bin\iPhone\Release\Plugin.Contacts.dll" target="lib\Xamarin.iOS10\Plugin.Contacts.dll" />
      <file src="src\Contacts.Plugin.iOSUnified\bin\iPhone\Release\Plugin.Contacts.xml" target="lib\Xamarin.iOS10\Plugin.Contacts.xml" />

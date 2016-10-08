@@ -35,18 +35,10 @@
     <DocumentationFile>bin\iPhone\Release\Plugin.Contacts.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Contacts.Plugin.iOS\AddressBook.cs">
-      <Link>AddressBook.cs</Link>
-    </Compile>
-    <Compile Include="..\Contacts.Plugin.iOS\ContactHelper.cs">
-      <Link>ContactHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Contacts.Plugin.iOS\ContactQueryProvider.cs">
-      <Link>ContactQueryProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Contacts.Plugin.iOS\ContactsImplementation.cs">
-      <Link>ContactsImplementation.cs</Link>
-    </Compile>
+    <Compile Include="AddressBook.cs" />
+    <Compile Include="ContactHelper.cs" />
+    <Compile Include="ContactQueryProvider.cs" />
+    <Compile Include="ContactsImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

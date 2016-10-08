@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contacts.Plugin", "Contacts.Plugin\Contacts.Plugin.csproj", "{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contacts.Plugin.Abstractions", "Contacts.Plugin.Abstractions\Contacts.Plugin.Abstractions.csproj", "{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contacts.Plugin.iOS", "Contacts.Plugin.iOS\Contacts.Plugin.iOS.csproj", "{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contacts.Plugin.iOSUnified", "Contacts.Plugin.iOSUnified\Contacts.Plugin.iOSUnified.csproj", "{2882AEEB-D4CD-4EB9-8A6C-6653B33681F0}"
 EndProject
@@ -37,23 +35,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contacts.Plugin.UWP", "Cont
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{d7f3aa16-8ef1-4924-9e0a-dad4ab46b2eb}*SharedItemsImports = 4
-		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{d7f3aa16-8ef1-4924-9e0a-dad4ab46b2eb}*SharedItemsImports = 4
-		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{56a56f17-7de1-4ca1-9617-bf32e971ac84}*SharedItemsImports = 4
-		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{56a56f17-7de1-4ca1-9617-bf32e971ac84}*SharedItemsImports = 4
 		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{2882aeeb-d4cd-4eb9-8a6c-6653b33681f0}*SharedItemsImports = 4
 		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{2882aeeb-d4cd-4eb9-8a6c-6653b33681f0}*SharedItemsImports = 4
+		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{40972f57-9d5d-46aa-a3aa-a8ed0cd88bb5}*SharedItemsImports = 4
+		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{40972f57-9d5d-46aa-a3aa-a8ed0cd88bb5}*SharedItemsImports = 4
+		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{56a56f17-7de1-4ca1-9617-bf32e971ac84}*SharedItemsImports = 4
+		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{56a56f17-7de1-4ca1-9617-bf32e971ac84}*SharedItemsImports = 4
 		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{5876144b-47dd-4c4e-b421-bc03f191b996}*SharedItemsImports = 4
 		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{5876144b-47dd-4c4e-b421-bc03f191b996}*SharedItemsImports = 4
-		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{f56d67d9-7cc0-49b0-bbb1-3878bf1cd49f}*SharedItemsImports = 13
 		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{7169373f-0b82-4e5d-9129-7cc3065b90fa}*SharedItemsImports = 4
 		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{7169373f-0b82-4e5d-9129-7cc3065b90fa}*SharedItemsImports = 4
+		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{a6fcef44-d2ba-42c7-b3cb-13667bcd7b54}*SharedItemsImports = 4
 		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{dd23087a-2d1f-4d58-9d79-cfb9e9d5b6b2}*SharedItemsImports = 13
 		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{ed9a4ca1-c04c-457d-9a2e-7995ccf12356}*SharedItemsImports = 4
 		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{ed9a4ca1-c04c-457d-9a2e-7995ccf12356}*SharedItemsImports = 4
-		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{a6fcef44-d2ba-42c7-b3cb-13667bcd7b54}*SharedItemsImports = 4
-		Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems*{40972f57-9d5d-46aa-a3aa-a8ed0cd88bb5}*SharedItemsImports = 4
-		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{40972f57-9d5d-46aa-a3aa-a8ed0cd88bb5}*SharedItemsImports = 4
+		Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems*{f56d67d9-7cc0-49b0-bbb1-3878bf1cd49f}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,16 +82,6 @@ Global
 		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}.Release|ARM.ActiveCfg = Release|Any CPU
 		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}.Release|x64.ActiveCfg = Release|Any CPU
 		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}.Release|x86.ActiveCfg = Release|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Release|ARM.ActiveCfg = Release|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Release|x64.ActiveCfg = Release|Any CPU
-		{D7F3AA16-8EF1-4924-9E0A-DAD4AB46B2EB}.Release|x86.ActiveCfg = Release|Any CPU
 		{2882AEEB-D4CD-4EB9-8A6C-6653B33681F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2882AEEB-D4CD-4EB9-8A6C-6653B33681F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2882AEEB-D4CD-4EB9-8A6C-6653B33681F0}.Debug|ARM.ActiveCfg = Debug|Any CPU
