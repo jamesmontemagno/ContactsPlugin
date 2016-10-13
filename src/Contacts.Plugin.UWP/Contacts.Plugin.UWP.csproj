@@ -112,6 +112,8 @@
     <Compile Include="..\Contacts.Plugin.WindowsStore\ContactsImplementation.cs">
       <Link>ContactsImplementation.cs</Link>
     </Compile>
+    <Compile Include="AddressBook.cs" />
+    <Compile Include="ContactQueryProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Plugin.Contacts.rd.xml" />
   </ItemGroup>
