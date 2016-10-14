@@ -11,26 +11,32 @@ namespace Plugin.Contacts
 {
     public sealed class AddressBook : IQueryable<Contact>
     {
+        public AddressBook()
+        {
+            provider = new ContactQueryProvider();
+        }
+
+        public Contact Load(string id)
+        {
+            throw new NotSupportedException();
+        }
+
         public Type ElementType => typeof(Contact);
 
         public Expression Expression => Expression.Constant(this);
 
-        public IQueryProvider Provider
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IQueryProvider Provider => provider;
 
         public IEnumerator<Contact> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return provider.GetContacts().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
+
+        private readonly ContactQueryProvider provider;
     }
 }

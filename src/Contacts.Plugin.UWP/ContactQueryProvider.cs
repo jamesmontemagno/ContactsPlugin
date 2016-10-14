@@ -1,20 +1,164 @@
-﻿using Plugin.Contacts.Abstractions;
+﻿using AutoMapper;
+using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using Windows.ApplicationModel.Contacts;
 
 namespace Plugin.Contacts
 {
-    internal sealed class ContactQueryProvider : IQueryProvider
+    //internal static class AddressTypeExtension
+    //{
+    //    public static ContactAddressKind ToContactAddressKind(this Abstractions.AddressType value)
+    //    {
+    //        switch (value)
+    //        {
+    //            case Abstractions.AddressType.Home:
+    //                return ContactAddressKind.Home;
+    //            case Abstractions.AddressType.Work:
+    //                return ContactAddressKind.Work;
+    //            case Abstractions.AddressType.Other:
+    //                return ContactAddressKind.Other;
+    //            default:
+    //                throw new ArgumentOutOfRangeException(nameof(value));
+    //        }
+    //    }
+    //}
+
+    //internal static class ContactAddressKindExtension
+    //{
+    //    public static Abstractions.AddressType ToAddressType(this ContactAddressKind value)
+    //    {
+    //        switch (value)
+    //        {
+    //            case ContactAddressKind.Home:
+    //                return Abstractions.AddressType.Home;
+    //            case ContactAddressKind.Work:
+    //                return Abstractions.AddressType.Work;
+    //            case ContactAddressKind.Other:
+    //                return Abstractions.AddressType.Other;
+    //            default:
+    //                throw new ArgumentOutOfRangeException(nameof(value));
+    //        }
+    //    }
+    //}
+
+    internal static class ContactEmailKindExtension
     {
-        private IEnumerable<Contact> GetContacts()
+        public static Abstractions.EmailType ToEmailType(this ContactEmailKind value)
         {
-            throw new NotImplementedException();
+            switch (value)
+            {
+                case ContactEmailKind.Personal:
+                    return Abstractions.EmailType.Home;
+                case ContactEmailKind.Work:
+                    return Abstractions.EmailType.Work;
+                case ContactEmailKind.Other:
+                    return Abstractions.EmailType.Other;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(value));
+            }
+        }
+    }
+
+    internal static class ContactPhoneKindExtension
+    {
+        public static Abstractions.PhoneType ToPhoneType(this ContactPhoneKind value)
+        {
+            switch (value)
+            {
+                case ContactPhoneKind.Home:
+                    return Abstractions.PhoneType.Home;
+                case ContactPhoneKind.Mobile:
+                    return Abstractions.PhoneType.Mobile;
+                case ContactPhoneKind.Work:
+                    return Abstractions.PhoneType.Work;
+                case ContactPhoneKind.Other:
+                    return Abstractions.PhoneType.Other;
+                case ContactPhoneKind.Pager:
+                    return Abstractions.PhoneType.Pager;
+                case ContactPhoneKind.BusinessFax:
+                    return Abstractions.PhoneType.WorkFax;
+                case ContactPhoneKind.HomeFax:
+                    return Abstractions.PhoneType.HomeFax;
+                case ContactPhoneKind.Company:
+                    return Abstractions.PhoneType.Other;
+                case ContactPhoneKind.Assistant:
+                    return Abstractions.PhoneType.Other;
+                case ContactPhoneKind.Radio:
+                    return Abstractions.PhoneType.Other;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(value));
+            }
+        }
+    }
+
+    internal class UWPContactMapToPluginContact
+    {
+        public static IMapper Mapper
+            => current?.mapper ?? (current = new UWPContactMapToPluginContact()).mapper;
+
+        private sealed class DefaultMappingProfile : Profile
+        {
+            public DefaultMappingProfile()
+            {
+                CreateMap<ContactAddress, Abstractions.Address>()
+                     .ForMember(x => x.Type, opt => opt.MapFrom(x => (Abstractions.AddressType)
+                         Enum.Parse(typeof(Abstractions.AddressType), x.Kind.ToString(), true)))
+                     .ForMember(x => x.Label, opt => opt.MapFrom(x => x.Kind.ToString()));
+
+                // TODO: Maybe better map with ContactRelationship
+                CreateMap<ContactSignificantOther, Abstractions.Relationship>()
+                    .ForMember(x => x.Type, opt => opt.MapFrom(x => Abstractions.RelationshipType.SignificantOther));
+
+                // Website
+                CreateMap<ContactWebsite, Abstractions.Website>()
+                    .ForMember(x => x.Address, opt => opt.MapFrom(x => x.Uri.OriginalString));
+
+                // Origanization
+                CreateMap<ContactJobInfo, Abstractions.Organization>()
+                    .ForMember(x => x.Name, opt => opt.MapFrom(x => x.CompanyName))
+                    .ForMember(x => x.ContactTitle, opt => opt.MapFrom(x => x.Title))
+                    .ForMember(x => x.Type, opt => opt.MapFrom(x => Abstractions.OrganizationType.Work))
+                    .ForMember(x => x.Label, opt => opt.MapFrom(x => "Work"));
+
+                // Email
+                CreateMap<ContactEmail, Abstractions.Email>()
+                    .ForMember(x => x.Type, opt => opt.MapFrom(x => x.Kind.ToEmailType()))
+                    // TODO: Is mandatory same value in Type and Label?
+                    .ForMember(x => x.Label, opt => opt.MapFrom(x => x.Kind.ToString()))
+                    .ForMember(x => x.Address, opt => opt.MapFrom(x => x.Address));
+
+                // Phone
+                CreateMap<ContactPhone, Abstractions.Phone>()
+                    .ForMember(x => x.Type, opt => opt.MapFrom(x => x.Kind.ToPhoneType()))
+                    // TODO: Is mandatory same value in Type and Label?
+                    .ForMember(x => x.Label, opt => opt.MapFrom(x => x.Kind.ToString()))
+                    .ForMember(x => x.Number, opt => opt.MapFrom(x => x.Number));
+
+                CreateMap<Contact, Abstractions.Contact>()
+                    .ForMember(x => x.Notes, opt => opt.MapFrom(
+                        x => new List<Abstractions.Note> { new Abstractions.Note() { Contents = x.Notes } }));
+
+            }
         }
 
+        private UWPContactMapToPluginContact()
+        {
+            configuration = new MapperConfiguration(cfg => cfg.AddProfile<DefaultMappingProfile>());
+
+            mapper = configuration.CreateMapper();
+        }
+
+        private static UWPContactMapToPluginContact current;
+        private MapperConfiguration configuration;
+        private IMapper mapper;
+    }
+
+    internal sealed class ContactQueryProvider : IQueryProvider
+    {
         public IQueryable CreateQuery(Expression expression)
         {
             throw new NotImplementedException();
@@ -22,17 +166,56 @@ namespace Plugin.Contacts
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            throw new NotImplementedException();
+            return new Query<TElement>(this, expression);
         }
 
         public object Execute(Expression expression)
         {
-            throw new NotImplementedException();
+            IQueryable<Abstractions.Contact> q = GetContacts().AsQueryable();
+
+            expression = ReplaceQueryable(expression, q);
+
+            if (expression.Type.GetTypeInfo().IsGenericType &&
+                expression.Type.GetGenericTypeDefinition() == typeof(IQueryable<>))
+                return q.Provider.CreateQuery(expression);
+            else
+                return q.Provider.Execute(expression);
         }
 
         public TResult Execute<TResult>(Expression expression)
         {
-            throw new NotImplementedException();
+            return (TResult)((IQueryProvider)this).Execute(expression);
+        }
+
+        public IEnumerable<Plugin.Contacts.Abstractions.Contact> GetContacts()
+        {
+            var contactPicker = new ContactPicker();
+
+            return UWPContactMapToPluginContact.Mapper.Map<IList<Contact>, IEnumerable<Abstractions.Contact>>(
+                AsyncContext.Run(async () => await contactPicker.PickContactsAsync()));
+        }
+
+        private Expression ReplaceQueryable(Expression expression, object value)
+        {
+            MethodCallExpression mc = expression as MethodCallExpression;
+            if (mc != null)
+            {
+                Expression[] args = mc.Arguments.ToArray();
+                Expression narg = ReplaceQueryable(mc.Arguments[0], value);
+                if (narg != args[0])
+                {
+                    args[0] = narg;
+                    return Expression.Call(mc.Method, args);
+                }
+                else
+                    return mc;
+            }
+
+            ConstantExpression c = expression as ConstantExpression;
+            if (c != null && c.Type.GetInterfaces().Contains(typeof(IQueryable)))
+                return Expression.Constant(value);
+
+            return expression;
         }
     }
 }

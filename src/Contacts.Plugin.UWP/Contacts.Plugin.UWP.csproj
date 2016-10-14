@@ -123,6 +123,11 @@
       <Name>Contacts.Plugin.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
   <Import Project="..\Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems" Label="Shared" />
   <Import Project="..\Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
