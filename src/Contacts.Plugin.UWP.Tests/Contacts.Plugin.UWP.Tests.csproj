@@ -126,6 +126,16 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Contacts.Plugin.Abstractions\Contacts.Plugin.Abstractions.csproj">
+      <Project>{6edb0588-ffc5-4ef5-8a99-9e241d0f878d}</Project>
+      <Name>Contacts.Plugin.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contacts.Plugin.UWP\Contacts.Plugin.UWP.csproj">
+      <Project>{40972f57-9d5d-46aa-a3aa-a8ed0cd88bb5}</Project>
+      <Name>Contacts.Plugin.UWP</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

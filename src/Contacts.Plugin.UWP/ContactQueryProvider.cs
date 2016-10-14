@@ -189,10 +189,12 @@ namespace Plugin.Contacts
 
         public IEnumerable<Plugin.Contacts.Abstractions.Contact> GetContacts()
         {
-            var contactPicker = new ContactPicker();
+            var contactStore = AsyncContext.Run(
+                async () => await ContactManager.RequestStoreAsync(
+                ContactStoreAccessType.AllContactsReadOnly));
 
-            return UWPContactMapToPluginContact.Mapper.Map<IList<Contact>, IEnumerable<Abstractions.Contact>>(
-                AsyncContext.Run(async () => await contactPicker.PickContactsAsync()));
+            return UWPContactMapToPluginContact.Mapper.Map<IReadOnlyList<Contact>, IEnumerable<Abstractions.Contact>>(
+                AsyncContext.Run(async () => await contactStore.FindContactsAsync()));
         }
 
         private Expression ReplaceQueryable(Expression expression, object value)

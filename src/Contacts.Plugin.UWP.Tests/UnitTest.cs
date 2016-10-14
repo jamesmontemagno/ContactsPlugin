@@ -7,7 +7,7 @@ using System.Linq;
 using Nito.AsyncEx;
 using System.Diagnostics;
 
-namespace Contacts.Plugin.UWP.Tests
+namespace Plugin.Contacts.UWP.Tests
 {
     [TestClass]
     public class UnitTest1
@@ -30,8 +30,28 @@ namespace Contacts.Plugin.UWP.Tests
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void GeneralTest()
         {
+            var contactsImplementation = new ContactsImplementation();
+            AsyncContext.Run(async () =>
+            {
+                if (await contactsImplementation.RequestPermission())
+                {
+                    List<Plugin.Contacts.Abstractions.Contact> contacts = null;
+                    contactsImplementation.PreferContactAggregation = false;
+
+                    await Task.Run(() =>
+                    {
+                        Assert.IsNotNull(contactsImplementation.Contacts);
+                        contacts = contactsImplementation.Contacts
+                            .Where(c => c.Phones.Count > 0 && c.FirstName.Length >= 5)
+                            .ToList();
+
+                        Assert.IsNotNull(contacts);
+                        Assert.AreEqual(2, contacts.Count);
+                    });
+                }
+            });
         }
 
         private static async Task<Contact> AddContact(string firstName, string lastName, string phoneNumber)

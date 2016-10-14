@@ -20,11 +20,11 @@ namespace Plugin.Contacts
             {
                 try
                 {
-                    // TODO: Is it better approach exists? this approach has been very performance issue.
-                    IList<Windows.ApplicationModel.Contacts.Contact> contacts = AsyncContext.Run(
-                        async () => await new Windows.ApplicationModel.Contacts.ContactPicker().PickContactsAsync());
-                    contacts.ToArray(); // Will trigger exception if manifest doesn't specify Contacts
-                    return true;
+                    // TODO: Is it better approach exists?
+                    return AsyncContext.Run(async () => await
+                        Windows.ApplicationModel.Contacts.ContactManager.RequestStoreAsync(
+                        Windows.ApplicationModel.Contacts.ContactStoreAccessType.AllContactsReadOnly))
+                        == null ? false : true;
                 }
                 catch (Exception)
                 {
