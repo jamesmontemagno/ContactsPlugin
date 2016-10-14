@@ -217,35 +217,5 @@ namespace Plugin.Contacts
 
             return expression;
         }
-        //private async Task AddContact(string firstName, string lastName, string phoneNumber)
-        //{
-        //    // Thanks to http://stackoverflow.com/a/34652963/1539100
-
-        //    var contact = new Contact()
-        //    {
-        //        FirstName = firstName,
-        //        LastName = lastName
-        //    };
-
-        //    contact.Phones.Add(new ContactPhone()
-        //    {
-        //        Number = phoneNumber,
-        //        Kind = ContactPhoneKind.Mobile
-        //    });
-
-        //    /*
-        //     * Get he contact store for the app (so no lists from outlook
-        //     * and other stuff will be in the returned lists..)
-        //     */
-        //    var contactStore = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
-
-        //    IReadOnlyList<ContactList> contactLists = await contactStore.FindContactListsAsync();
-
-        //    ContactList contactList = contactLists.Count == 0
-        //        ? await contactStore.CreateContactListAsync("TestList") : contactLists.FirstOrDefault();
-
-        //    await contactList.SaveContactAsync(contact);
-        //}
-
     }
 }
