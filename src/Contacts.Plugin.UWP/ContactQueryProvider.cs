@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Windows.ApplicationModel.Contacts;
+
+[assembly: InternalsVisibleTo("Contacts.Plugin.UWP.Tests")]
 
 namespace Plugin.Contacts
 {
@@ -193,8 +196,18 @@ namespace Plugin.Contacts
                 async () => await ContactManager.RequestStoreAsync(
                 ContactStoreAccessType.AllContactsReadOnly));
 
-            return UWPContactMapToPluginContact.Mapper.Map<IReadOnlyList<Contact>, IEnumerable<Abstractions.Contact>>(
-                AsyncContext.Run(async () => await contactStore.FindContactsAsync()));
+            IReadOnlyList<Contact> contacts = AsyncContext.Run(async () => await contactStore.FindContactsAsync());
+
+            /*
+             * TODO: Why cannot write simple:
+             * UWPContactMapToPluginContact.Mapper.Map<IReadOnlyList<Contact>, IEnumerable<Abstractions.Contact>>(mutableContacts);
+             */
+
+            var mutableContacts = new List<Contact>();
+            foreach (Contact contact in contacts)
+                mutableContacts.Add(contact);
+
+            return UWPContactMapToPluginContact.Mapper.Map<List<Contact>, IEnumerable<Abstractions.Contact>>(mutableContacts);
         }
 
         private Expression ReplaceQueryable(Expression expression, object value)

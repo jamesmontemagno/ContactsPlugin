@@ -54,6 +54,83 @@ namespace Plugin.Contacts.UWP.Tests
             });
         }
 
+        [TestMethod]
+        public void ContactMapToPluginContactShouldBeWork()
+        {
+            var contact = new Contact()
+            {
+                FirstName = "lalal",
+                LastName = "hghghg"
+            };
+
+            Plugin.Contacts.Abstractions.Contact pluginContact = UWPContactMapToPluginContact.Mapper.Map<Contact,
+                Plugin.Contacts.Abstractions.Contact>(contact);
+
+            Assert.IsNotNull(pluginContact);
+            Assert.AreEqual(contact.FirstName, pluginContact.FirstName);
+            Assert.AreEqual(contact.LastName, pluginContact.LastName);
+        }
+
+        [TestMethod]
+        public void PhoneContactMapToPluginContactShouldBeWork()
+        {
+            var contact = new Contact()
+            {
+                FirstName = "lalal",
+                LastName = "hghghg"
+            };
+
+            contact.Phones.Add(new ContactPhone()
+            {
+                Description = "Test number",
+                Kind = ContactPhoneKind.Mobile,
+                Number= "1234567890"
+            });
+
+            Plugin.Contacts.Abstractions.Contact pluginContact = UWPContactMapToPluginContact.Mapper.Map<Contact,
+                Plugin.Contacts.Abstractions.Contact>(contact);
+
+            Assert.IsNotNull(pluginContact);
+            Assert.AreEqual(contact.FirstName, pluginContact.FirstName);
+            Assert.AreEqual(contact.LastName, pluginContact.LastName);
+            Assert.AreEqual(contact.Phones.First().Number, pluginContact.Phones.First().Number);
+        }
+
+        [TestMethod]
+        public void CollectionContactsMapToPluginContactsShouldBeWoek()
+        {
+            IReadOnlyList<Contact> contacts = new List<Contact>()
+            {
+                CreateContact("ttt", "qqqq"),
+                CreateContact("ggg", "aaa"),
+                CreateContact("bbb", "zzz"),
+            };
+
+            IEnumerable<Plugin.Contacts.Abstractions.Contact> pluginContacts =
+                UWPContactMapToPluginContact.Mapper.Map<IReadOnlyList<Contact>,
+                IEnumerable<Plugin.Contacts.Abstractions.Contact>>(contacts);
+        }
+
+        private Contact CreateContact(string firstName, string lastName)
+        {
+            var contact = new Contact()
+            {
+                FirstName = firstName,
+                LastName = lastName
+            };
+
+            var random = new Random();
+            contact.Phones.Add(new ContactPhone()
+            {
+                Description = firstName + " " + lastName + " phone",
+                Kind = ContactPhoneKind.Mobile,
+                Number = random.Next((int)Math.Pow(10, 5), (int)Math.Pow(10, 6) - 1).ToString()
+            });
+
+            return contact;
+        }
+
+
         private static async Task<Contact> AddContact(string firstName, string lastName, string phoneNumber)
         {
             // Thanks to http://stackoverflow.com/a/34652963/1539100
