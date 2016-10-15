@@ -1,63 +1,75 @@
-using Nito.AsyncEx;
 using Plugin.Contacts.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
-
 
 namespace Plugin.Contacts
 {
-    /// <summary>
-    /// Implementation for Contacts
-    /// </summary>
     public class ContactsImplementation : IContacts
     {
-        public Task<bool> RequestPermission()
+        public bool AggregateContactsSupported
         {
-            return Task<bool>.Factory.StartNew(() =>
+            get
             {
-                try
-                {
-                    // TODO: Is it better approach exists?
-                    return AsyncContext.Run(async () => await
-                        Windows.ApplicationModel.Contacts.ContactManager.RequestStoreAsync(
-                        Windows.ApplicationModel.Contacts.ContactStoreAccessType.AllContactsReadOnly))
-                        == null ? false : true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+                throw new NotImplementedException();
+            }
         }
 
-        private AddressBook AddressBook
+        public IQueryable<Contact> Contacts
         {
-            get { return addressBook ?? (addressBook = new AddressBook()); }
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public IQueryable<Contact> Contacts => AddressBook;
-
-        public Contact LoadContact(string id)
+        public bool IsReadOnly
         {
-            return AddressBook.Load(id);
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public bool LoadSupported => false;
+        public bool LoadSupported
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public bool PreferContactAggregation
         {
-            get; set;
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public bool AggregateContactsSupported => true;
+        public bool SingleContactsSupported
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
-        public bool SingleContactsSupported => false;
+        public Contact LoadContact(string id)
+        {
+            throw new NotImplementedException();
+        }
 
-        public bool IsReadOnly => true;
-
-        private AddressBook addressBook;
+        public Task<bool> RequestPermission()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
