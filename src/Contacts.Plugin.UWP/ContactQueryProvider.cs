@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Nito.AsyncEx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -192,11 +191,10 @@ namespace Plugin.Contacts
 
         public IEnumerable<Plugin.Contacts.Abstractions.Contact> GetContacts()
         {
-            var contactStore = AsyncContext.Run(
-                async () => await ContactManager.RequestStoreAsync(
-                ContactStoreAccessType.AllContactsReadOnly));
+            var contactStore = ContactManager.RequestStoreAsync(
+                ContactStoreAccessType.AllContactsReadOnly).AsTask().Result;
 
-            IReadOnlyList<Contact> contacts = AsyncContext.Run(async () => await contactStore.FindContactsAsync());
+            IReadOnlyList<Contact> contacts = contactStore.FindContactsAsync().AsTask().Result;
 
             /*
              * TODO: Why cannot write simple:

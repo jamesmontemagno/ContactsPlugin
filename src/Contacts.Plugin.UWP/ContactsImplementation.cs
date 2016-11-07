@@ -1,5 +1,4 @@
-﻿using Nito.AsyncEx;
-using Plugin.Contacts.Abstractions;
+﻿using Plugin.Contacts.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +20,9 @@ namespace Plugin.Contacts
                 try
                 {
                     // TODO: Is it better approach exists?
-                    return AsyncContext.Run(async () => await
-                        Windows.ApplicationModel.Contacts.ContactManager.RequestStoreAsync(
-                        Windows.ApplicationModel.Contacts.ContactStoreAccessType.AllContactsReadOnly))
-                        == null ? false : true;
+                    return Windows.ApplicationModel.Contacts.ContactManager.RequestStoreAsync(
+                    Windows.ApplicationModel.Contacts.ContactStoreAccessType.AllContactsReadOnly).AsTask().Result
+                    == null ? false : true;
                 }
                 catch (Exception)
                 {

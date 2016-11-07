@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
 using System.Collections.Generic;
 using System.Linq;
-using Nito.AsyncEx;
 using System.Diagnostics;
 
 namespace Plugin.Contacts.UWP.Tests
@@ -16,9 +15,9 @@ namespace Plugin.Contacts.UWP.Tests
         public static void SetupTests(TestContext testContext)
         {
             contacts = new List<Contact>();
-            contacts.Add(AsyncContext.Run(async () => await AddContact("sala", "sali", "0009292992")));
-            contacts.Add(AsyncContext.Run(async () => await AddContact("asala", "tsali", "1009292992")));
-            contacts.Add(AsyncContext.Run(async () => await AddContact("bsala", "ysali", "2009292992")));
+            contacts.Add(AddContact("sala", "sali", "0009292992").Result);
+            contacts.Add(AddContact("asala", "tsali", "1009292992").Result);
+            contacts.Add(AddContact("bsala", "ysali", "2009292992").Result);
         }
 
         [ClassCleanup]
@@ -26,32 +25,29 @@ namespace Plugin.Contacts.UWP.Tests
         {
             if (contacts != null)
                 foreach (Contact contact in contacts)
-                    AsyncContext.Run(async () => await DeleteContact(contact));
+                    DeleteContact(contact).Wait();
         }
 
         [TestMethod]
         public void GeneralTest()
         {
             var contactsImplementation = new ContactsImplementation();
-            AsyncContext.Run(async () =>
+            if (contactsImplementation.RequestPermission().Result)
             {
-                if (await contactsImplementation.RequestPermission())
+                List<Plugin.Contacts.Abstractions.Contact> contacts = null;
+                contactsImplementation.PreferContactAggregation = false;
+
+                Task.Run(() =>
                 {
-                    List<Plugin.Contacts.Abstractions.Contact> contacts = null;
-                    contactsImplementation.PreferContactAggregation = false;
+                    Assert.IsNotNull(contactsImplementation.Contacts);
+                    contacts = contactsImplementation.Contacts
+                        .Where(c => c.Phones.Count > 0 && c.FirstName.Length >= 5)
+                        .ToList();
 
-                    await Task.Run(() =>
-                    {
-                        Assert.IsNotNull(contactsImplementation.Contacts);
-                        contacts = contactsImplementation.Contacts
-                            .Where(c => c.Phones.Count > 0 && c.FirstName.Length >= 5)
-                            .ToList();
-
-                        Assert.IsNotNull(contacts);
-                        Assert.AreEqual(2, contacts.Count);
-                    });
-                }
-            });
+                    Assert.IsNotNull(contacts);
+                    Assert.AreEqual(2, contacts.Count);
+                });
+            }
         }
 
         [TestMethod]
