@@ -30,6 +30,9 @@
            <group targetFramework="MonoAndroid10">
                <dependency id="Plugin.Permissions" version="1.2.1"/>
            </group>
+         <group targetFramework="uap">
+           <dependency id="AutoMapper" version="5.1.1"/>
+         </group>
        </dependencies>
    </metadata>
    <files>

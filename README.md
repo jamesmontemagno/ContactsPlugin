@@ -19,9 +19,9 @@ Ported from [Xamarin.Mobile](http://www.github.com/xamarin/xamarin.mobile) to a 
 |Xamarin.iOS Unified|Yes|iOS 7+|
 |Xamarin.Android|Yes|API 14+|
 |Windows Phone Silverlight|Yes|8.0+|
-|Windows Phone RT|---|8.1+|
-|Windows Store RT|---|8.1+|
-|Windows 10 UWP|---|10+|
+|Windows Phone RT|No|8.1+|
+|Windows Store RT|No|8.1+|
+|Windows 10 UWP|Yes|10+|
 |Xamarin.Mac|No||
 
 **Supports**
