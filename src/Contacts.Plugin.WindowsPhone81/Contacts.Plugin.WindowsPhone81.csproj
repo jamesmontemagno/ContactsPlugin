@@ -80,17 +80,14 @@
     <DocumentationFile>bin\Release\Plugin.Contacts.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Compile Include="ContactsImplementation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Contacts.Plugin.Abstractions\Contacts.Plugin.Abstractions.csproj">
       <Project>{6edb0588-ffc5-4ef5-8a99-9e241d0f878d}</Project>
       <Name>Contacts.Plugin.Abstractions</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Contacts.Plugin.WindowsStore\ContactsImplementation.cs">
-      <Link>ContactsImplementation.cs</Link>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
