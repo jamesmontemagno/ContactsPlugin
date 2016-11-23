@@ -1,4 +1,5 @@
 ﻿using Plugin.Contacts.Abstractions;
+using Plugin.Permissions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +14,27 @@ namespace Plugin.Contacts
     /// </summary>
     public class ContactsImplementation : IContacts
     {
-        public Task<bool> RequestPermission()
+        /// <summary>
+        /// Request permissions for Contacts
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> RequestPermission()
         {
-            return Task<bool>.Factory.StartNew(() =>
+            var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permissions.Abstractions.Permission.Contacts).ConfigureAwait(false);
+            if (status != Permissions.Abstractions.PermissionStatus.Granted)
             {
-                try
+                Console.WriteLine("Currently does not have Contacts permissions, requesting permissions");
+
+                var request = await CrossPermissions.Current.RequestPermissionsAsync(Permissions.Abstractions.Permission.Contacts);
+
+                if (request[Permissions.Abstractions.Permission.Contacts] != Permissions.Abstractions.PermissionStatus.Granted)
                 {
-                    // TODO: Is it better approach exists?
-                    return Windows.ApplicationModel.Contacts.ContactManager.RequestStoreAsync(
-                    Windows.ApplicationModel.Contacts.ContactStoreAccessType.AllContactsReadOnly).AsTask().Result
-                    == null ? false : true;
-                }
-                catch (Exception)
-                {
+                    Console.WriteLine("Contacts permission denied, can not get positions async.");
                     return false;
                 }
-            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+
+            return true;
         }
 
         private AddressBook AddressBook

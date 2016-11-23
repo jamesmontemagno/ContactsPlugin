@@ -32,6 +32,7 @@
            </group>
          <group targetFramework="uap">
            <dependency id="AutoMapper" version="5.1.1"/>
+           <dependency id="Plugin.Permissions" version="1.2.1"/>
          </group>
        </dependencies>
    </metadata>
