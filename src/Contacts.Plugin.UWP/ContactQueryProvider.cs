@@ -11,42 +11,6 @@ using Windows.ApplicationModel.Contacts;
 
 namespace Plugin.Contacts
 {
-    //internal static class AddressTypeExtension
-    //{
-    //    public static ContactAddressKind ToContactAddressKind(this Abstractions.AddressType value)
-    //    {
-    //        switch (value)
-    //        {
-    //            case Abstractions.AddressType.Home:
-    //                return ContactAddressKind.Home;
-    //            case Abstractions.AddressType.Work:
-    //                return ContactAddressKind.Work;
-    //            case Abstractions.AddressType.Other:
-    //                return ContactAddressKind.Other;
-    //            default:
-    //                throw new ArgumentOutOfRangeException(nameof(value));
-    //        }
-    //    }
-    //}
-
-    //internal static class ContactAddressKindExtension
-    //{
-    //    public static Abstractions.AddressType ToAddressType(this ContactAddressKind value)
-    //    {
-    //        switch (value)
-    //        {
-    //            case ContactAddressKind.Home:
-    //                return Abstractions.AddressType.Home;
-    //            case ContactAddressKind.Work:
-    //                return Abstractions.AddressType.Work;
-    //            case ContactAddressKind.Other:
-    //                return Abstractions.AddressType.Other;
-    //            default:
-    //                throw new ArgumentOutOfRangeException(nameof(value));
-    //        }
-    //    }
-    //}
-
     internal static class ContactEmailKindExtension
     {
         public static Abstractions.EmailType ToEmailType(this ContactEmailKind value)
