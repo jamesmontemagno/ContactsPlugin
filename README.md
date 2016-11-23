@@ -19,8 +19,8 @@ Ported from [Xamarin.Mobile](http://www.github.com/xamarin/xamarin.mobile) to a 
 |Xamarin.iOS Unified|Yes|iOS 7+|
 |Xamarin.Android|Yes|API 14+|
 |Windows Phone Silverlight|Yes|8.0+|
-|Windows Phone RT|---|8.1+|
-|Windows Store RT|---|8.1+|
+|Windows Phone RT|No|8.1+|
+|Windows Store RT|No|8.1+|
 |Windows 10 UWP|Yes|10+|
 |Xamarin.Mac|No||
 
@@ -31,7 +31,7 @@ Ported from [Xamarin.Mobile](http://www.github.com/xamarin/xamarin.mobile) to a 
 * Windows Phone 8 (Silverlight)
 * Windows Phone 8.1 RT (Blank Implementation)
 * Windows Store 8.1 (Blank Implementation)
-* Windows 10 UWP (Blank Implementation)
+* Windows 10 UWP
 
 ### API Usage Example
 ```csharp
@@ -73,7 +73,7 @@ if(await CrossContacts.Current.RequestPermission())
 
 * **UWP**
  
- You must mark Contacts in Capablities tab at app manifest.
+ You must mark Contacts in Capabilities tab at app manifest.
 
 #### License
 This is a derivative to [Xamarin.Mobile's Contacts](http://github.com/xamarin/xamarin.mobile) with a cross platform API and other enhancements.
