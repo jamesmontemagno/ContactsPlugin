@@ -31,7 +31,7 @@ Ported from [Xamarin.Mobile](http://www.github.com/xamarin/xamarin.mobile) to a 
 * Windows Phone 8 (Silverlight)
 * Windows Phone 8.1 RT (Blank Implementation)
 * Windows Store 8.1 (Blank Implementation)
-* Windows 10 UWP (Blank Implementation)
+* Windows 10 UWP
 
 ### API Usage Example
 ```csharp
@@ -59,22 +59,27 @@ if(await CrossContacts.Current.RequestPermission())
 
 ### Important
 
-**Android**
-Tha android.permissions.READ_CONTACTS permission is required, but the library will automatically add this for you. Additionally, if your users are running Marshmallow the Plugin will automatically prompt them for runtime permissions when RequestPermissions() is called.
+* **Android**
+ 
+ The android.permissions.READ_CONTACTS permission is required, but the library will automatically add this for you. Additionally, if your users are running Marshmallow the Plugin will automatically prompt them for runtime permissions when RequestPermissions() is called.
 
-**iOS**
-**iOS**
-When compiling against iOS 10 SDK Your info.plist needs to specify key NSContactsUsageDescription and a value explaining why the application wants to access the contacts.
+* **iOS**
+ 
+ When compiling against iOS 10 SDK Your info.plist needs to specify key NSContactsUsageDescription and a value explaining why the application wants to access the contacts. Permissions will automatically be requested when RequestPermissions() is called.
 
-Permissions will automatically be requested when RequestPermissions() is called.
+* **Windows Phone**
+ 
+ You must add ID_CAP_CONTACTS permission
 
-**Windows Phone**
-You must add ID_CAP_CONTACTS permission
-
+* **UWP**
+ 
+ You must mark Contacts in Capabilities tab at app manifest.
 
 #### License
 This is a derivative to [Xamarin.Mobile's Contacts](http://github.com/xamarin/xamarin.mobile) with a cross platform API and other enhancements.
-﻿//
+
+```
+//
 //  Copyright 2011-2013, Xamarin Inc.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,3 +94,4 @@ This is a derivative to [Xamarin.Mobile's Contacts](http://github.com/xamarin/xa
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 //
+```
