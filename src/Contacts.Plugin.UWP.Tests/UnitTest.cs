@@ -31,23 +31,24 @@ namespace Plugin.Contacts.UWP.Tests
         [TestMethod]
         public void GeneralTest()
         {
-            var contactsImplementation = new ContactsImplementation();
-            if (contactsImplementation.RequestPermission().Result)
-            {
-                List<Plugin.Contacts.Abstractions.Contact> contacts = null;
-                contactsImplementation.PreferContactAggregation = false;
+            GeneralTest(new ContactsImplementation());
+        }
 
-                Task.Run(() =>
-                {
-                    Assert.IsNotNull(contactsImplementation.Contacts);
-                    contacts = contactsImplementation.Contacts
-                        .Where(c => c.Phones.Count > 0 && c.FirstName.Length >= 5)
-                        .ToList();
+        [TestMethod]
+        public void GeneralCrossPlatformTest()
+        {
+            GeneralTest(CrossContacts.Current);
+        }
 
-                    Assert.IsNotNull(contacts);
-                    Assert.AreEqual(2, contacts.Count);
-                });
-            }
+        [TestMethod]
+        public async Task GeneralAsyncTest()
+        {
+            await GeneralAsyncTest(new ContactsImplementation());
+        }
+
+        public async Task GeneralAsyncCrossPlatformTest()
+        {
+            await GeneralAsyncTest(CrossContacts.Current);
         }
 
         [TestMethod]
@@ -105,6 +106,50 @@ namespace Plugin.Contacts.UWP.Tests
             IEnumerable<Plugin.Contacts.Abstractions.Contact> pluginContacts =
                 UWPContactMapToPluginContact.Mapper.Map<IReadOnlyList<Contact>,
                 IEnumerable<Plugin.Contacts.Abstractions.Contact>>(contacts);
+        }
+
+        private void GeneralTest(Abstractions.IContacts contactsInput)
+        {
+            if (contactsInput.RequestPermission().Result)
+            {
+                List<Plugin.Contacts.Abstractions.Contact> contacts = null;
+                contactsInput.PreferContactAggregation = false;
+
+                Task.Run(() =>
+                {
+                    Assert.IsNotNull(contactsInput.Contacts);
+                    contacts = contactsInput.Contacts
+                        .Where(c => c.Phones.Count > 0 && c.FirstName.Length >= 5)
+                        .ToList();
+
+                    Assert.IsNotNull(contacts);
+                    Assert.AreEqual(2, contacts.Count);
+                });
+            }
+            else
+                Assert.Fail();
+        }
+
+        private async Task GeneralAsyncTest(Abstractions.IContacts contactsInput)
+        {
+            if (await contactsInput.RequestPermission())
+            {
+                List<Plugin.Contacts.Abstractions.Contact> contacts = null;
+                contactsInput.PreferContactAggregation = false;
+
+                await Task.Run(() =>
+                {
+                    Assert.IsNotNull(contactsInput.Contacts);
+                    contacts = contactsInput.Contacts
+                        .Where(c => c.Phones.Count > 0 && c.FirstName.Length >= 5)
+                        .ToList();
+
+                    Assert.IsNotNull(contacts);
+                    Assert.AreEqual(2, contacts.Count);
+                });
+            }
+            else
+                Assert.Fail();
         }
 
         private Contact CreateContact(string firstName, string lastName)
