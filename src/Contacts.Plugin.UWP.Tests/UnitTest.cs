@@ -110,7 +110,7 @@ namespace Plugin.Contacts.UWP.Tests
 			{
 				Description = "Test number",
 				Kind = ContactPhoneKind.Mobile,
-				Number= "1234567890"
+				Number = "1234567890"
 			});
 
 			Plugin.Contacts.Abstractions.Contact pluginContact = UWPContactMapToPluginContact.Mapper.Map<Contact,
