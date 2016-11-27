@@ -9,59 +9,59 @@ using System.Threading.Tasks;
 
 namespace Plugin.Contacts
 {
-    /// <summary>
-    /// Implementation for Contacts
-    /// </summary>
-    public class ContactsImplementation : IContacts
-    {
-        /// <summary>
-        /// Request permissions for Contacts
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> RequestPermission()
-        {
-            var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permissions.Abstractions.Permission.Contacts).ConfigureAwait(false);
-            if (status != Permissions.Abstractions.PermissionStatus.Granted)
-            {
-                Console.WriteLine("Currently does not have Contacts permissions, requesting permissions");
+	/// <summary>
+	/// Implementation for Contacts
+	/// </summary>
+	public class ContactsImplementation : IContacts
+	{
+		/// <summary>
+		/// Request permissions for Contacts
+		/// </summary>
+		/// <returns></returns>
+		public async Task<bool> RequestPermission()
+		{
+			var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permissions.Abstractions.Permission.Contacts).ConfigureAwait(false);
+			if (status != Permissions.Abstractions.PermissionStatus.Granted)
+			{
+				Console.WriteLine("Currently does not have Contacts permissions, requesting permissions");
 
-                var request = await CrossPermissions.Current.RequestPermissionsAsync(Permissions.Abstractions.Permission.Contacts);
+				var request = await CrossPermissions.Current.RequestPermissionsAsync(Permissions.Abstractions.Permission.Contacts);
 
-                if (request[Permissions.Abstractions.Permission.Contacts] != Permissions.Abstractions.PermissionStatus.Granted)
-                {
-                    Console.WriteLine("Contacts permission denied, can not get positions async.");
-                    return false;
-                }
-            }
+				if (request[Permissions.Abstractions.Permission.Contacts] != Permissions.Abstractions.PermissionStatus.Granted)
+				{
+					Console.WriteLine("Contacts permission denied, can not get positions async.");
+					return false;
+				}
+			}
 
-            return true;
-        }
+			return true;
+		}
 
-        private AddressBook AddressBook
-        {
-            get { return addressBook ?? (addressBook = new AddressBook()); }
-        }
+		private AddressBook AddressBook
+		{
+			get { return addressBook ?? (addressBook = new AddressBook()); }
+		}
 
-        public IQueryable<Contact> Contacts => AddressBook;
+		public IQueryable<Contact> Contacts => AddressBook;
 
-        public Contact LoadContact(string id)
-        {
-            return AddressBook.Load(id);
-        }
+		public Contact LoadContact(string id)
+		{
+			return AddressBook.Load(id);
+		}
 
-        public bool LoadSupported => false;
+		public bool LoadSupported => false;
 
-        public bool PreferContactAggregation
-        {
-            get; set;
-        }
+		public bool PreferContactAggregation
+		{
+			get; set;
+		}
 
-        public bool AggregateContactsSupported => true;
+		public bool AggregateContactsSupported => true;
 
-        public bool SingleContactsSupported => false;
+		public bool SingleContactsSupported => false;
 
-        public bool IsReadOnly => true;
+		public bool IsReadOnly => true;
 
-        private AddressBook addressBook;
-    }
+		private AddressBook addressBook;
+	}
 }
