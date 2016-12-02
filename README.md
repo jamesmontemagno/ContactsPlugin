@@ -62,6 +62,18 @@ if(await CrossContacts.Current.RequestPermission())
 * **Android**
  
  The android.permissions.READ_CONTACTS permission is required, but the library will automatically add this for you. Additionally, if your users are running Marshmallow the Plugin will automatically prompt them for runtime permissions when RequestPermissions() is called.
+ 
+ You must add the Permission Plugin code into your Main or Base Activities:
+
+```csharp
+public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+{
+    PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+}
+```
+
+You MUST set your Target version to API 23+ and Compile against API 23+:
+![image](https://cloud.githubusercontent.com/assets/1676321/17110560/7279341c-5252-11e6-89be-8c10b38c0ea6.png)
 
 * **iOS**
  
