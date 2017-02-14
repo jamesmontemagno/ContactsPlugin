@@ -1,41 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plugin.Contacts.Abstractions
+﻿namespace Plugin.Contacts.Abstractions
 {
-  public enum OrganizationType
-  {
-    Work,
-    Other
-  }
-
-  public class Organization
-  {
-    public OrganizationType Type
+    public enum OrganizationType
     {
-      get;
-      set;
+        Work,
+        Other
     }
 
-    public string Label
+    public class Organization
     {
-      get;
-      set;
-    }
+        public OrganizationType Type
+        {
+            get;
+            set;
+        }
 
-    public string Name
-    {
-      get;
-      set;
-    }
+        public string Label
+        {
+            get;
+            set;
+        }
 
-    public string ContactTitle
-    {
-      get;
-      set;
+        public string Name
+        {
+            get;
+            set;
+        }
+
+        public string ContactTitle
+        {
+            get;
+            set;
+        }
     }
-  }
 }

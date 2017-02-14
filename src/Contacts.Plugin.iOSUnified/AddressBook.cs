@@ -17,21 +17,16 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-#if __UNIFIED__
 using AddressBook;
 using UIKit;
 using Foundation;
-#else
-using MonoTouch.AddressBook;
-using MonoTouch.UIKit;
-using MonoTouch.Foundation;
-#endif
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Plugin.Contacts.Abstractions;
 
 namespace Plugin.Contacts
 {
+    [Preserve(AllMembers = true)]
     public class AddressBook
       : IQueryable<Contact> //IQueryable<Contact>
     {

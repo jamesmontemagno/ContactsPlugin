@@ -23,57 +23,58 @@ using Android.Database;
 
 namespace Plugin.Contacts
 {
-  internal class ProjectionReader<T>
-    : IEnumerable<T>
-  {
-    internal ProjectionReader(ContentResolver content, ContentQueryTranslator translator, Func<ICursor, int, T> selector)
+    [Android.Runtime.Preserve(AllMembers = true)]
+    internal class ProjectionReader<T>
+      : IEnumerable<T>
     {
-      this.content = content;
-      this.translator = translator;
-      this.selector = selector;
-    }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-      string[] projections = null;
-      if (this.translator.Projections != null)
-      {
-        projections = this.translator.Projections
-                .Where(p => p.Columns != null)
-                .SelectMany(t => t.Columns)
-                .ToArray();
-
-        if (projections.Length == 0)
-          projections = null;
-      }
-
-      ICursor cursor = null;
-      try
-      {
-
-        cursor = content.Query(translator.Table, projections,
-                                translator.QueryString, translator.ClauseParameters, translator.SortString);
-
-        while (cursor.MoveToNext())
+        internal ProjectionReader(ContentResolver content, ContentQueryTranslator translator, Func<ICursor, int, T> selector)
         {
-          int colIndex = cursor.GetColumnIndex(projections[0]);
-          yield return this.selector(cursor, colIndex);
+            this.content = content;
+            this.translator = translator;
+            this.selector = selector;
         }
-      }
-      finally
-      {
-        if (cursor != null)
-          cursor.Close();
-      }
-    }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-      return GetEnumerator();
-    }
+        public IEnumerator<T> GetEnumerator()
+        {
+            string[] projections = null;
+            if (this.translator.Projections != null)
+            {
+                projections = this.translator.Projections
+                        .Where(p => p.Columns != null)
+                        .SelectMany(t => t.Columns)
+                        .ToArray();
 
-    private readonly ContentResolver content;
-    private readonly ContentQueryTranslator translator;
-    private readonly Func<ICursor, int, T> selector;
-  }
+                if (projections.Length == 0)
+                    projections = null;
+            }
+
+            ICursor cursor = null;
+            try
+            {
+
+                cursor = content.Query(translator.Table, projections,
+                                        translator.QueryString, translator.ClauseParameters, translator.SortString);
+
+                while (cursor.MoveToNext())
+                {
+                    int colIndex = cursor.GetColumnIndex(projections[0]);
+                    yield return this.selector(cursor, colIndex);
+                }
+            }
+            finally
+            {
+                if (cursor != null)
+                    cursor.Close();
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private readonly ContentResolver content;
+        private readonly ContentQueryTranslator translator;
+        private readonly Func<ICursor, int, T> selector;
+    }
 }

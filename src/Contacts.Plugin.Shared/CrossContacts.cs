@@ -3,41 +3,41 @@ using System;
 
 namespace Plugin.Contacts
 {
-  /// <summary>
-  /// Cross platform Contacts implemenations
-  /// </summary>
-  public class CrossContacts
-  {
-    static Lazy<IContacts> Implementation = new Lazy<IContacts>(() => CreateContacts(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
-
     /// <summary>
-    /// Current settings to use
+    /// Cross platform Contacts implemenations
     /// </summary>
-    public static IContacts Current
+    public class CrossContacts
     {
-      get
-      {
-        var ret = Implementation.Value;
-        if (ret == null)
-        {
-          throw NotImplementedInReferenceAssembly();
-        }
-        return ret;
-      }
-    }
+        static Lazy<IContacts> Implementation = new Lazy<IContacts>(() => CreateContacts(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
-    static IContacts CreateContacts()
-    {
+        /// <summary>
+        /// Current settings to use
+        /// </summary>
+        public static IContacts Current
+        {
+            get
+            {
+                var ret = Implementation.Value;
+                if (ret == null)
+                {
+                    throw NotImplementedInReferenceAssembly();
+                }
+                return ret;
+            }
+        }
+
+        static IContacts CreateContacts()
+        {
 #if PORTABLE
         return null;
 #else
-        return new ContactsImplementation();
+            return new ContactsImplementation();
 #endif
-    }
+        }
 
-    internal static Exception NotImplementedInReferenceAssembly()
-    {
-      return new NotImplementedException("This functionality is not implemented in the portable version of this assembly.  You should reference the NuGet package from your main application project in order to reference the platform-specific implementation.");
+        internal static Exception NotImplementedInReferenceAssembly()
+        {
+            return new NotImplementedException("This functionality is not implemented in the portable version of this assembly.  You should reference the NuGet package from your main application project in order to reference the platform-specific implementation.");
+        }
     }
-  }
 }

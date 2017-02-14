@@ -25,106 +25,107 @@ using Android.Database;
 
 namespace Plugin.Contacts
 {
-  internal abstract class ContentQueryProvider
-    : IQueryProvider
-  {
-    internal ContentQueryProvider(ContentResolver content, Resources resources, ITableFinder tableFinder)
+    [Android.Runtime.Preserve(AllMembers = true)]
+    internal abstract class ContentQueryProvider
+      : IQueryProvider
     {
-      this.content = content;
-      this.resources = resources;
-      this.tableFinder = tableFinder;
-    }
-
-    public ITableFinder TableFinder
-    {
-      get { return this.tableFinder; }
-    }
-
-    protected readonly ContentResolver content;
-    protected readonly Resources resources;
-    private readonly ITableFinder tableFinder;
-
-    IQueryable IQueryProvider.CreateQuery(Expression expression)
-    {
-      throw new NotImplementedException();
-    }
-
-    object IQueryProvider.Execute(Expression expression)
-    {
-      var translator = new ContentQueryTranslator(this, this.tableFinder);
-      expression = translator.Translate(expression);
-
-      if (translator.IsCount || translator.IsAny)
-      {
-        ICursor cursor = null;
-        try
+        internal ContentQueryProvider(ContentResolver content, Resources resources, ITableFinder tableFinder)
         {
-          string[] projections = (translator.Projections != null)
-                                  ? translator.Projections
-                                      .Where(p => p.Columns != null)
-                                      .SelectMany(t => t.Columns)
-                                      .ToArray()
-                                  : null;
-
-          cursor = this.content.Query(translator.Table, projections, translator.QueryString,
-                                          translator.ClauseParameters, translator.SortString);
-
-          if (translator.IsCount)
-            return cursor.Count;
-          else
-            return (cursor.Count > 0);
+            this.content = content;
+            this.resources = resources;
+            this.tableFinder = tableFinder;
         }
-        finally
+
+        public ITableFinder TableFinder
         {
-          if (cursor != null)
-            cursor.Close();
+            get { return this.tableFinder; }
         }
-      }
 
-      IQueryable q = GetObjectReader(translator).AsQueryable();
-      //IQueryable q = GetObjectReader (null).AsQueryable();
+        protected readonly ContentResolver content;
+        protected readonly Resources resources;
+        private readonly ITableFinder tableFinder;
 
-      expression = ReplaceQueryable(expression, q);
-
-      if (expression.Type.IsGenericType && expression.Type.GetGenericTypeDefinition() == typeof(IOrderedQueryable<>))
-        return q.Provider.CreateQuery(expression);
-      else
-        return q.Provider.Execute(expression);
-    }
-
-    protected abstract IEnumerable GetObjectReader(ContentQueryTranslator translator);
-
-    IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression)
-    {
-      return new Query<TElement>(this, expression);
-    }
-
-    TResult IQueryProvider.Execute<TResult>(Expression expression)
-    {
-      return (TResult)((IQueryProvider)this).Execute(expression);
-    }
-
-    private Expression ReplaceQueryable(Expression expression, object value)
-    {
-      MethodCallExpression mc = expression as MethodCallExpression;
-      if (mc != null)
-      {
-        Expression[] args = mc.Arguments.ToArray();
-        Expression narg = ReplaceQueryable(mc.Arguments[0], value);
-        if (narg != args[0])
+        IQueryable IQueryProvider.CreateQuery(Expression expression)
         {
-          args[0] = narg;
-          return Expression.Call(mc.Method, args);
+            throw new NotImplementedException();
         }
-        else
-          return mc;
-      }
 
-      ConstantExpression c = expression as ConstantExpression;
-      if (c != null && c.Type.GetInterfaces().Contains(typeof(IQueryable)))
-        return Expression.Constant(value);
+        object IQueryProvider.Execute(Expression expression)
+        {
+            var translator = new ContentQueryTranslator(this, this.tableFinder);
+            expression = translator.Translate(expression);
 
-      return expression;
+            if (translator.IsCount || translator.IsAny)
+            {
+                ICursor cursor = null;
+                try
+                {
+                    string[] projections = (translator.Projections != null)
+                                            ? translator.Projections
+                                                .Where(p => p.Columns != null)
+                                                .SelectMany(t => t.Columns)
+                                                .ToArray()
+                                            : null;
+
+                    cursor = this.content.Query(translator.Table, projections, translator.QueryString,
+                                                    translator.ClauseParameters, translator.SortString);
+
+                    if (translator.IsCount)
+                        return cursor.Count;
+                    else
+                        return (cursor.Count > 0);
+                }
+                finally
+                {
+                    if (cursor != null)
+                        cursor.Close();
+                }
+            }
+
+            IQueryable q = GetObjectReader(translator).AsQueryable();
+            //IQueryable q = GetObjectReader (null).AsQueryable();
+
+            expression = ReplaceQueryable(expression, q);
+
+            if (expression.Type.IsGenericType && expression.Type.GetGenericTypeDefinition() == typeof(IOrderedQueryable<>))
+                return q.Provider.CreateQuery(expression);
+            else
+                return q.Provider.Execute(expression);
+        }
+
+        protected abstract IEnumerable GetObjectReader(ContentQueryTranslator translator);
+
+        IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression)
+        {
+            return new Query<TElement>(this, expression);
+        }
+
+        TResult IQueryProvider.Execute<TResult>(Expression expression)
+        {
+            return (TResult)((IQueryProvider)this).Execute(expression);
+        }
+
+        private Expression ReplaceQueryable(Expression expression, object value)
+        {
+            MethodCallExpression mc = expression as MethodCallExpression;
+            if (mc != null)
+            {
+                Expression[] args = mc.Arguments.ToArray();
+                Expression narg = ReplaceQueryable(mc.Arguments[0], value);
+                if (narg != args[0])
+                {
+                    args[0] = narg;
+                    return Expression.Call(mc.Method, args);
+                }
+                else
+                    return mc;
+            }
+
+            ConstantExpression c = expression as ConstantExpression;
+            if (c != null && c.Type.GetInterfaces().Contains(typeof(IQueryable)))
+                return Expression.Constant(value);
+
+            return expression;
+        }
     }
-  }
 }

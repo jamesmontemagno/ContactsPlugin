@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Plugin.Contacts.Abstractions
+﻿namespace Plugin.Contacts.Abstractions
 {
-  public class Note
-  {
-    public string Contents
+    public class Note
     {
-      get;
-      set;
+        public string Contents
+        {
+            get;
+            set;
+        }
     }
-  }
 }

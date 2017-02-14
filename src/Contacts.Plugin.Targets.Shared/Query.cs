@@ -22,48 +22,53 @@ using System.Linq.Expressions;
 
 namespace Plugin.Contacts
 {
-  internal class Query<T>
-    : IOrderedQueryable<T>
-  {
-    public Query(IQueryProvider provider)
+#if __IOS__
+    [Foundation.Preserve(AllMembers = true)]
+#elif __ANDROID__
+    [Android.Runtime.Preserve(AllMembers=true)]
+#endif
+    internal class Query<T>
+      : IOrderedQueryable<T>
     {
-      this.provider = provider;
-      this.expression = Expression.Constant(this);
-    }
+        public Query(IQueryProvider provider)
+        {
+            this.provider = provider;
+            this.expression = Expression.Constant(this);
+        }
 
-    public Query(IQueryProvider provider, Expression expression)
-    {
-      this.provider = provider;
-      this.expression = expression;
-    }
+        public Query(IQueryProvider provider, Expression expression)
+        {
+            this.provider = provider;
+            this.expression = expression;
+        }
 
-    public IEnumerator<T> GetEnumerator()
-    {
-      var enumerable = ((IEnumerable<T>)this.provider.Execute(this.expression));
-      return (enumerable ?? Enumerable.Empty<T>()).GetEnumerator();
-    }
+        public IEnumerator<T> GetEnumerator()
+        {
+            var enumerable = ((IEnumerable<T>)this.provider.Execute(this.expression));
+            return (enumerable ?? Enumerable.Empty<T>()).GetEnumerator();
+        }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-      return GetEnumerator();
-    }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-    public Type ElementType
-    {
-      get { return typeof(T); }
-    }
+        public Type ElementType
+        {
+            get { return typeof(T); }
+        }
 
-    public Expression Expression
-    {
-      get { return this.expression; }
-    }
+        public Expression Expression
+        {
+            get { return this.expression; }
+        }
 
-    public IQueryProvider Provider
-    {
-      get { return this.provider; }
-    }
+        public IQueryProvider Provider
+        {
+            get { return this.provider; }
+        }
 
-    private readonly Expression expression;
-    private readonly IQueryProvider provider;
-  }
+        private readonly Expression expression;
+        private readonly IQueryProvider provider;
+    }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -24,8 +23,8 @@ namespace Plugin.Contacts
 				case ContactEmailKind.Other:
 					return Abstractions.EmailType.Other;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(value));
-			}
+                    return Abstractions.EmailType.Other;
+            }
 		}
 	}
 
@@ -56,75 +55,45 @@ namespace Plugin.Contacts
 				case ContactPhoneKind.Radio:
 					return Abstractions.PhoneType.Other;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(value));
-			}
+                    return Abstractions.PhoneType.Other;
+            }
 		}
 	}
 
-	internal class UWPContactMapToPluginContact
-	{
-		public static IMapper Mapper
-			=> current?.mapper ?? (current = new UWPContactMapToPluginContact()).mapper;
+    internal static class ContactAddressKindExtension
+    {
+        public static Abstractions.AddressType ToAddressType(this ContactAddressKind value)
+        {
+            switch (value)
+            {
+                case ContactAddressKind.Home:
+                    return Abstractions.AddressType.Home;
+                case ContactAddressKind.Work:
+                    return Abstractions.AddressType.Work;
+                default:
+                    return Abstractions.AddressType.Other;
+            }
+        }
+    }
 
-		private sealed class DefaultMappingProfile : Profile
-		{
-			public DefaultMappingProfile()
-			{
-				CreateMap<ContactAddress, Abstractions.Address>()
-					 .ForMember(x => x.Type, opt => opt.MapFrom(x => (Abstractions.AddressType)
-						 Enum.Parse(typeof(Abstractions.AddressType), x.Kind.ToString(), true)))
-					 .ForMember(x => x.Label, opt => opt.MapFrom(x => x.Kind.ToString()))
-					 .ForMember(x => x.City, opt => opt.MapFrom(x => x.Locality));
+    internal static class ContactSignificantOtherKindExtension
+    {
+        public static Abstractions.RelationshipType ToRelationshipType(this ContactRelationship value)
+        {
+            switch (value)
+            {
+                case ContactRelationship.Child:
+                    return Abstractions.RelationshipType.Child;
+                case ContactRelationship.Spouse:
+                case ContactRelationship.Partner:
+                    return Abstractions.RelationshipType.SignificantOther;
+                default:
+                    return Abstractions.RelationshipType.Other;
+            }
+        }
+    }
 
-				// TODO: Maybe better map with ContactRelationship
-				CreateMap<ContactSignificantOther, Abstractions.Relationship>()
-					.ForMember(x => x.Type, opt => opt.MapFrom(x => Abstractions.RelationshipType.SignificantOther));
-
-				// Website
-				CreateMap<ContactWebsite, Abstractions.Website>()
-					.ForMember(x => x.Address, opt => opt.MapFrom(x => x.Uri.OriginalString));
-
-				// Origanization
-				CreateMap<ContactJobInfo, Abstractions.Organization>()
-					.ForMember(x => x.Name, opt => opt.MapFrom(x => x.CompanyName))
-					.ForMember(x => x.ContactTitle, opt => opt.MapFrom(x => x.Title))
-					.ForMember(x => x.Type, opt => opt.MapFrom(x => Abstractions.OrganizationType.Work))
-					.ForMember(x => x.Label, opt => opt.MapFrom(x => "Work"));
-
-				// Email
-				CreateMap<ContactEmail, Abstractions.Email>()
-					.ForMember(x => x.Type, opt => opt.MapFrom(x => x.Kind.ToEmailType()))
-					// TODO: Is mandatory same value in Type and Label?
-					.ForMember(x => x.Label, opt => opt.MapFrom(x => x.Kind.ToString()))
-					.ForMember(x => x.Address, opt => opt.MapFrom(x => x.Address));
-
-				// Phone
-				CreateMap<ContactPhone, Abstractions.Phone>()
-					.ForMember(x => x.Type, opt => opt.MapFrom(x => x.Kind.ToPhoneType()))
-					// TODO: Is mandatory same value in Type and Label?
-					.ForMember(x => x.Label, opt => opt.MapFrom(x => x.Kind.ToString()))
-					.ForMember(x => x.Number, opt => opt.MapFrom(x => x.Number));
-
-				CreateMap<Contact, Abstractions.Contact>()
-					.ForMember(x => x.Notes, opt => opt.MapFrom(
-						x => new List<Abstractions.Note> { new Abstractions.Note() { Contents = x.Notes } }));
-
-			}
-		}
-
-		private UWPContactMapToPluginContact()
-		{
-			configuration = new MapperConfiguration(cfg => cfg.AddProfile<DefaultMappingProfile>());
-
-			mapper = configuration.CreateMapper();
-		}
-
-		private static UWPContactMapToPluginContact current;
-		private MapperConfiguration configuration;
-		private IMapper mapper;
-	}
-
-	internal sealed class ContactQueryProvider : IQueryProvider
+    internal sealed class ContactQueryProvider : IQueryProvider
 	{
 		public IQueryable CreateQuery(Expression expression)
 		{
@@ -154,24 +123,77 @@ namespace Plugin.Contacts
 			return (TResult)((IQueryProvider)this).Execute(expression);
 		}
 
-		public IEnumerable<Plugin.Contacts.Abstractions.Contact> GetContacts()
+		public IEnumerable<Abstractions.Contact> GetContacts()
 		{
 			var contactStore = ContactManager.RequestStoreAsync(
 				ContactStoreAccessType.AllContactsReadOnly).AsTask().Result;
 
-			IReadOnlyList<Contact> contacts = contactStore.FindContactsAsync().AsTask().Result;
+			var contacts = contactStore.FindContactsAsync().AsTask().Result;
 
-			/*
+            /*
 			 * TODO: Why cannot write simple:
 			 * UWPContactMapToPluginContact.Mapper.Map<IReadOnlyList<Contact>, IEnumerable<Abstractions.Contact>>(mutableContacts);
 			 */
 
-			var mutableContacts = new List<Contact>();
-			foreach (Contact contact in contacts)
-				mutableContacts.Add(contact);
+            return ConvertToContacts(contacts);
+        }
+        public static IEnumerable<Abstractions.Contact> ConvertToContacts(IReadOnlyCollection<Contact> contacts)
+        {
+            return contacts.Select(c => ConvertToContact(c));
+        }
+        public static Abstractions.Contact ConvertToContact(Contact contact)
+        {
 
-			return UWPContactMapToPluginContact.Mapper.Map<List<Contact>, IEnumerable<Abstractions.Contact>>(mutableContacts);
-		}
+            return  new Abstractions.Contact(contact.Id, true)
+            {
+                Addresses = contact.Addresses.Select(a => new Abstractions.Address
+                {
+                    City = a.Locality,
+                    Label = a.Kind.ToString(),
+                    Country = a.Country,
+                    PostalCode = a.PostalCode,
+                    Region = a.Region,
+                    StreetAddress = a.StreetAddress,
+                    Type = a.Kind.ToAddressType(),
+                }).ToList(),
+                DisplayName = contact.DisplayName,
+                Emails = contact.Emails.Select(a => new Abstractions.Email
+                {
+                    Address = a.Address,
+                    Type = a.Kind.ToEmailType(),
+                    Label = a.Description
+                }).ToList(),
+                FirstName = contact.FirstName,
+                LastName = contact.LastName,
+                MiddleName = contact.MiddleName,
+                Nickname = contact.Nickname,
+                Notes = new List<Abstractions.Note>(new[] { new Abstractions.Note { Contents = contact.Notes } }),
+                Organizations = contact.JobInfo.Select(a => new Abstractions.Organization
+                {
+                    ContactTitle = a.Title,
+                    Label = a.Description,
+                    Name = a.CompanyAddress,
+                    Type = Abstractions.OrganizationType.Work
+                }).ToList(),
+                Phones = contact.Phones.Select(a => new Abstractions.Phone
+                {
+                    Label = a.Description,
+                    Number = a.Number,
+                    Type = a.Kind.ToPhoneType()
+                }).ToList(),
+                Prefix = contact.HonorificNamePrefix,
+                Relationships = contact.SignificantOthers.Select(a => new Abstractions.Relationship
+                {
+                    Name = a.Name,
+                    Type = a.Relationship.ToRelationshipType()
+                }).ToList(),
+                Suffix = contact.HonorificNameSuffix,
+                Websites = contact.Websites.Select(a => new Abstractions.Website
+                {
+                    Address = a.Uri?.ToString() ?? string.Empty
+                }).ToList(),
+            };
+        }
 
 		private Expression ReplaceQueryable(Expression expression, object value)
 		{

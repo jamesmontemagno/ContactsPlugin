@@ -55,7 +55,7 @@ namespace Plugin.Contacts.UWP.Tests
 		[TestMethod]
 		public void ContactAddressMapToPluginAddressShouldBeFillAllFields()
 		{
-			var contactAddress = new ContactAddress()
+			var a = new ContactAddress()
 			{
 				Country = "C",
 				Description = "D",
@@ -66,17 +66,26 @@ namespace Plugin.Contacts.UWP.Tests
 				StreetAddress = "S"
 			};
 
-			Plugin.Contacts.Abstractions.Address pluginAddress = UWPContactMapToPluginContact.Mapper.Map<ContactAddress,
-				Plugin.Contacts.Abstractions.Address>(contactAddress);
+            Abstractions.Address pluginAddress = new Abstractions.Address
+            {
+                City = a.Locality,
+                Label = a.Kind.ToString(),
+                Country = a.Country,
+                PostalCode = a.PostalCode,
+                Region = a.Region,
+                StreetAddress = a.StreetAddress,
+                Type = a.Kind.ToAddressType(),
+            };
 
-			Assert.IsNotNull(pluginAddress);
-			Assert.AreEqual(contactAddress.Country, pluginAddress.Country);
-			Assert.AreEqual(contactAddress.Locality, pluginAddress.City);
-			Assert.AreEqual(contactAddress.PostalCode, pluginAddress.PostalCode);
-			Assert.AreEqual(contactAddress.Region, pluginAddress.Region);
-			Assert.AreEqual(contactAddress.StreetAddress, pluginAddress.StreetAddress);
+
+            Assert.IsNotNull(pluginAddress);
+			Assert.AreEqual(a.Country, pluginAddress.Country);
+			Assert.AreEqual(a.Locality, pluginAddress.City);
+			Assert.AreEqual(a.PostalCode, pluginAddress.PostalCode);
+			Assert.AreEqual(a.Region, pluginAddress.Region);
+			Assert.AreEqual(a.StreetAddress, pluginAddress.StreetAddress);
 			Assert.AreEqual((Abstractions.AddressType)
-						 Enum.Parse(typeof(Abstractions.AddressType), contactAddress.Kind.ToString(), true),
+						 Enum.Parse(typeof(Abstractions.AddressType), a.Kind.ToString(), true),
 						 pluginAddress.Type);
 		}
 
@@ -89,10 +98,10 @@ namespace Plugin.Contacts.UWP.Tests
 				LastName = "hghghg"
 			};
 
-			Plugin.Contacts.Abstractions.Contact pluginContact = UWPContactMapToPluginContact.Mapper.Map<Contact,
-				Plugin.Contacts.Abstractions.Contact>(contact);
 
-			Assert.IsNotNull(pluginContact);
+            var pluginContact = ContactQueryProvider.ConvertToContact(contact);
+
+            Assert.IsNotNull(pluginContact);
 			Assert.AreEqual(contact.FirstName, pluginContact.FirstName);
 			Assert.AreEqual(contact.LastName, pluginContact.LastName);
 		}
@@ -113,10 +122,10 @@ namespace Plugin.Contacts.UWP.Tests
 				Number = "1234567890"
 			});
 
-			Plugin.Contacts.Abstractions.Contact pluginContact = UWPContactMapToPluginContact.Mapper.Map<Contact,
-				Plugin.Contacts.Abstractions.Contact>(contact);
+            var pluginContact = ContactQueryProvider.ConvertToContact(contact);
 
-			Assert.IsNotNull(pluginContact);
+
+            Assert.IsNotNull(pluginContact);
 			Assert.AreEqual(contact.FirstName, pluginContact.FirstName);
 			Assert.AreEqual(contact.LastName, pluginContact.LastName);
 			Assert.AreEqual(contact.Phones.First().Number, pluginContact.Phones.First().Number);
@@ -132,10 +141,10 @@ namespace Plugin.Contacts.UWP.Tests
 				CreateContact("bbb", "zzz"),
 			};
 
-			IEnumerable<Plugin.Contacts.Abstractions.Contact> pluginContacts =
-				UWPContactMapToPluginContact.Mapper.Map<IReadOnlyList<Contact>,
-				IEnumerable<Plugin.Contacts.Abstractions.Contact>>(contacts);
-		}
+            var pluginContacts =
+                ContactQueryProvider.ConvertToContacts(contacts);
+
+        }
 
 		private void GeneralTest(Abstractions.IContacts contactsInput)
 		{
