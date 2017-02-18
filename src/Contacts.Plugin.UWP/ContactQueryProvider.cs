@@ -172,7 +172,7 @@ namespace Plugin.Contacts
                 {
                     ContactTitle = a.Title,
                     Label = a.Description,
-                    Name = a.CompanyAddress,
+                    Name = a.CompanyName,
                     Type = Abstractions.OrganizationType.Work
                 }).ToList(),
                 Phones = contact.Phones.Select(a => new Abstractions.Phone
