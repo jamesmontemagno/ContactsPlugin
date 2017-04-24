@@ -27,7 +27,7 @@ namespace Plugin.Contacts
 #elif __ANDROID__
     [Android.Runtime.Preserve(AllMembers=true)]
 #endif
-    internal class Query<T>
+    public class Query<T>
       : IOrderedQueryable<T>
     {
         public Query(IQueryProvider provider)

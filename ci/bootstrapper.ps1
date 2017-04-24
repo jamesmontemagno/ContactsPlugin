@@ -45,7 +45,7 @@ if (!(Test-Path $NUGET_EXE)) {
 
 # Make sure NuGet exists where we expect it.
 if (!(Test-Path $NUGET3_EXE)) {
-    Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -OutFile $NUGET3_EXE
+    Invoke-WebRequest -Uri https://dist.nuget.org/win-x86-commandline/v4.1.0/nuget.exe -OutFile $NUGET3_EXE
 }
 
 # Make sure NuGet exists where we expect it.
