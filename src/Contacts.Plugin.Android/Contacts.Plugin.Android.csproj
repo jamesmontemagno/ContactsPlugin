@@ -77,6 +77,24 @@
     <Compile Include="ProjectionReader.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Contacts.Plugin\Contact.cs">
+      <Link>Contact.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\CrossContacts.cs">
+      <Link>CrossContacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\ExpressionEvaluator.cs">
+      <Link>ExpressionEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\ExpressionNominator.cs">
+      <Link>ExpressionNominator.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\ExpressionVisitor.cs">
+      <Link>ExpressionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\Query.cs">
+      <Link>Query.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -91,8 +109,6 @@
   <Import Project="..\Contacts.Plugin.Shared\Contacts.Plugin.Shared.projitems" Label="Shared" Condition="Exists('..\Contacts.Plugin.Shared\Contacts.Plugin.Shared.projitems')" />
   <Import Project="..\Contacts.Plugin.Shared\Contacts.Plugin.Shared.projitems" Label="Shared" Condition="Exists('..\Contacts.Plugin.Shared\Contacts.Plugin.Shared.projitems')" />
   <Import Project="..\..\Contatcs.Plugin.Shared\Contatcs.Plugin.Shared.projitems" Label="Shared" Condition="Exists('..\..\Contatcs.Plugin.Shared\Contatcs.Plugin.Shared.projitems')" />
-  <Import Project="..\Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems" Label="Shared" />
-  <Import Project="..\Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

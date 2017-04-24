@@ -11,8 +11,8 @@
     <AssemblyName>Plugin.Contacts</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -114,6 +114,24 @@
     <Compile Include="ContactsImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Plugin.Contacts.rd.xml" />
+    <Compile Include="..\Contacts.Plugin\Contact.cs">
+      <Link>Contact.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\CrossContacts.cs">
+      <Link>CrossContacts.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\ExpressionEvaluator.cs">
+      <Link>ExpressionEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\ExpressionNominator.cs">
+      <Link>ExpressionNominator.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\ExpressionVisitor.cs">
+      <Link>ExpressionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Contacts.Plugin\Query.cs">
+      <Link>Query.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contacts.Plugin.Abstractions\Contacts.Plugin.Abstractions.csproj">
@@ -121,13 +139,6 @@
       <Name>Contacts.Plugin.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
-      <Name>Windows Mobile Extensions for the UWP</Name>
-    </SDKReference>
-  </ItemGroup>
-  <Import Project="..\Contacts.Plugin.Shared\Contatcs.Plugin.Shared.projitems" Label="Shared" />
-  <Import Project="..\Contacts.Plugin.Targets.Shared\Contacts.Plugin.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
