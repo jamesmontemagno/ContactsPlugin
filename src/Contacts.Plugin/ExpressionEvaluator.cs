@@ -25,7 +25,7 @@ namespace Plugin.Contacts
 #elif __ANDROID__
     [Android.Runtime.Preserve(AllMembers=true)]
 #endif
-    internal static class ExpressionEvaluator
+    public static class ExpressionEvaluator
     {
         public static Expression Evaluate(Expression expression, Func<Expression, bool> predicate)
         {
