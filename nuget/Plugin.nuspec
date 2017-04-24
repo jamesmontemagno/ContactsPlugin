@@ -44,31 +44,13 @@
      <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.xml" target="lib\portable-net45+wp80+win8+wpa81\Plugin.Contacts.Abstractions.xml" />
      <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.pdb" target="lib\portable-net45+wp80+win8+wpa81\Plugin.Contacts.Abstractions.pdb" />
 
-     <!--Win Phone Silverlight-->
-     <file src="src\Contacts.Plugin.WindowsPhone8\bin\Release\Plugin.Contacts.dll" target="lib\wp8\Plugin.Contacts.dll" />
-     <file src="src\Contacts.Plugin.WindowsPhone8\bin\Release\Plugin.Contacts.xml" target="lib\wp8\Plugin.Contacts.xml" />
-     <file src="src\Contacts.Plugin.WindowsPhone8\bin\Release\Plugin.Contacts.pdb" target="lib\wp8\Plugin.Contacts.pdb" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.dll" target="lib\wp8\Plugin.Contacts.Abstractions.dll" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.xml" target="lib\wp8\Plugin.Contacts.Abstractions.xml" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.pdb" target="lib\wp8\Plugin.Contacts.Abstractions.pdb" />
-
-     <!--Win Phone 81-->
-     <file src="src\Contacts.Plugin.WindowsPhone81\bin\Release\Plugin.Contacts.dll" target="lib\wpa81\Plugin.Contacts.dll" />
-     <file src="src\Contacts.Plugin.WindowsPhone81\bin\Release\Plugin.Contacts.xml" target="lib\wpa81\Plugin.Contacts.xml" />
-     <file src="src\Contacts.Plugin.WindowsPhone81\bin\Release\Plugin.Contacts.pdb" target="lib\wpa81\Plugin.Contacts.pdb" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.dll" target="lib\wpa81\Plugin.Contacts.Abstractions.dll" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.xml" target="lib\wpa81\Plugin.Contacts.Abstractions.xml" />
-     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.pdb" target="lib\wpa81\Plugin.Contacts.Abstractions.pdb" />
-
-
-     <!--WinStore-->
-    <file src="src\Contacts.Plugin.WindowsStore\bin\Release\Plugin.Contacts.dll" target="lib\win8\Plugin.Contacts.dll" />
-    <file src="src\Contacts.Plugin.WindowsStore\bin\Release\Plugin.Contacts.xml" target="lib\win8\Plugin.Contacts.xml" />
-    <file src="src\Contacts.Plugin.WindowsStore\bin\Release\Plugin.Contacts.pdb" target="lib\win8\Plugin.Contacts.pdb" />
-    <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.dll" target="lib\win8\Plugin.Contacts.Abstractions.dll" />
-    <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.xml" target="lib\win8\Plugin.Contacts.Abstractions.xml" />
-    <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.pdb" target="lib\win8\Plugin.Contacts.Abstractions.pdb" />
-
+	 <!-- NetStandard 1.4 -->
+     <file src="src\Contacts.Plugin\bin\Release\Plugin.Contacts.dll" target="lib\netstandard1.4\Plugin.Contacts.dll" />
+     <file src="src\Contacts.Plugin\bin\Release\Plugin.Contacts.xml" target="lib\netstandard1.4\Plugin.Contacts.xml" />
+     <file src="src\Contacts.Plugin\bin\Release\Plugin.Contacts.pdb" target="lib\netstandard1.4\Plugin.Contacts.pdb" />
+     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.dll" target="lib\netstandard1.4\Plugin.Contacts.Abstractions.dll" />
+     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.xml" target="lib\netstandard1.4\Plugin.Contacts.Abstractions.xml" />
+     <file src="src\Contacts.Plugin.Abstractions\bin\Release\Plugin.Contacts.Abstractions.pdb" target="lib\netstandard1.4\Plugin.Contacts.Abstractions.pdb" />
 
        <!--UWP-->
        <file src="src\Contacts.Plugin.UWP\bin\Release\Plugin.Contacts.dll" target="lib\UAP10\Plugin.Contacts.dll" />
