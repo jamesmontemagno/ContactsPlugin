@@ -28,6 +28,24 @@
   <Library Name="Plugin.Contacts">
 
   	<!-- add directives for your library here -->
-
+     <Type Name="System.Linq.Enumerable" Browse="Required PublicAndInternal">
+       <MethodInstantiation Name="Distinct" Arguments="System.Int32" Dynamic="Required" />
+       <MethodInstantiation Name="ToArray" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="Reverse" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="AsEnumerable" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="ToList" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="DefaultIfEmpty" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="First" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="FirstOrDefault" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="Last" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="LastOrDefault" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="Single" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="SingleOrDefault" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="Any" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="Count" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="LongCount" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="Min" Arguments="System.Int32" Dynamic="Required"/>
+       <MethodInstantiation Name="Max" Arguments="System.Int32" Dynamic="Required"/>
+     </Type>
   </Library>
 </Directives>
