@@ -1,3 +1,5 @@
+### THIS PLUGIN IS NOT UNDER DEVELOPMENT AND NOT SUPPORTED
+
 ## ContactsPlugin for Xamarin and Windows
 
 Simple cross platform plugin to get Contacts from the device.
